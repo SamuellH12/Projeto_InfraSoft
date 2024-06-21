@@ -1,5 +1,4 @@
 package Entrega_1;
-import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Banco {

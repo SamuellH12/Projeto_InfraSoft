@@ -1,27 +1,23 @@
 package Entrega_1;
 
-import com.sun.source.tree.CaseTree;
-
 import java.util.concurrent.locks.ReentrantLock;
 
-public class Ponte {
+// Versão da Ponte SEM controle de fluxo
+public class PonteBroken {
 
     public static class PonteControl {
         public boolean lado = false;
-        private ReentrantLock lock = new ReentrantLock();
 
         public void lado() {}
 
         public boolean atravessar(boolean lado, int id){
-            lock.lock();
             this.lado = lado;
             System.out.println("Carro "+ id + " atravessando da " + (lado ? "esquerda" : "direita") );
             return true;
         }
 
-        public void sair(){
-            System.out.println("Carro saiu. Ponte vazia");
-            lock.unlock();
+        public void sair(int id){
+            System.out.println("Carro "+id+" saiu");
         }
     }
 
@@ -47,18 +43,19 @@ public class Ponte {
             }
             catch (InterruptedException e)
             {
-                if(got) this.control.sair();
+                if(got) this.control.sair(this.id);
                 got = false;
                 throw new RuntimeException(e);
             }
 
-            if(got) this.control.sair();
+            if(got) this.control.sair(this.id);
         }
     }
 
     public static void main(String[] args) throws InterruptedException {
 
         PonteControl control = new PonteControl();
+        // Sem o controle vários carros entram na ponte ao mesmo tempo
 
         Carro c1 = new Carro(true,  105, 1, control);
         Carro c2 = new Carro(false, 125, 2, control);
