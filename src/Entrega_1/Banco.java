@@ -70,10 +70,10 @@ public class Banco {
 
         Conta contaCompartilhada = new Conta(100);
 
-        User u1 = new User("Sofia", contaCompartilhada, new int[]{220, 55 , 53, 101, 404});
-        User u2 = new User("Miguel", contaCompartilhada, new int[]{100, -4, 25, 10, 45});
+        User u1 = new User("Sofia", contaCompartilhada, new int[]{-220, 55 , 53, 101, -404});
+        User u2 = new User("Miguel", contaCompartilhada, new int[]{-100, -4, 25, 10, 45});
         User u3 = new User("Maria", contaCompartilhada, new int[]{-50, 33, 12, 2, 90});
-        User u4 = new User("Zé", contaCompartilhada, new int[]{-200, 100, -455, 250, 45});
+        User u4 = new User("Zé", contaCompartilhada, new int[]{-200, 100, -455, -250, 45});
 
         Thread t1 = new Thread(u1);
         Thread t2 = new Thread(u2);

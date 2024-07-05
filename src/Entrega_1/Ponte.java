@@ -1,7 +1,4 @@
 package Entrega_1;
-
-import com.sun.source.tree.CaseTree;
-
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Ponte {
@@ -60,12 +57,12 @@ public class Ponte {
 
         PonteControl control = new PonteControl();
 
-        Carro c1 = new Carro(true,  105, 1, control);
-        Carro c2 = new Carro(false, 125, 2, control);
-        Carro c3 = new Carro(true,  102, 3, control);
-        Carro c4 = new Carro(false, 210, 4, control);
-        Carro c5 = new Carro(true,  135, 5, control);
-        Carro c6 = new Carro(false, 145, 6, control);
+        Carro c1 = new Carro(true,  1050, 1, control);
+        Carro c2 = new Carro(false, 1250, 2, control);
+        Carro c3 = new Carro(true,  1020, 3, control);
+        Carro c4 = new Carro(false, 2100, 4, control);
+        Carro c5 = new Carro(true,  1350, 5, control);
+        Carro c6 = new Carro(false, 1450, 6, control);
 
         Thread t1 = new Thread(c1);
         Thread t2 = new Thread(c2);
