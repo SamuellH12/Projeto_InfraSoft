@@ -10,7 +10,7 @@ public class BARBEIRO {
         boolean atendendo = false;
         ArrayList<Cliente> fila;
 
-        boolean TryToGetVaga(){
+        boolean TryToGetVaga(Cliente c){
             lock.lock();
             boolean conseguiu = false;
 
@@ -18,12 +18,14 @@ public class BARBEIRO {
             {
                 if(this.VagasTotais > 0)
                 {
-                    if(!atendendo) atendendo = true; //acorda o barbeiro
-                    else this.VagasTotais--;
+                    if(!atendendo) atendendo = true; //acorda o barbeiro para ser atendido por ele.
+                    else this.VagasTotais--;         // só ocupa uma vaga se o barbaeiro não estiver atendendo ele.
 
-
+                    fila.add(c);
 
                     conseguiu = true;
+
+                    System.out.println("Cliente " + c.id + " entrou na Barbearia");
                 }
             }
             finally { lock.unlock(); }
@@ -31,15 +33,20 @@ public class BARBEIRO {
             return conseguiu;
         }
 
+        boolean
     }
 
     public static class Barbeiro implements Runnable {
+
         public void run() {
 
         }
     }
 
     public static class Cliente implements Runnable {
+
+        int id;
+
         public void run() {
 
         }
