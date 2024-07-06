@@ -1,4 +1,6 @@
 package Entrega_2;
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class RESTAURANTE {
@@ -10,8 +12,6 @@ public class RESTAURANTE {
         int lugaresOcupados = 0;
         boolean juntos = false;   //
 
-        int GetSenhaAtual(){ return senhaAtual; }
-
         int GetNewSenha(int id){
             lock.lock();
             int valor = -1;
@@ -19,7 +19,7 @@ public class RESTAURANTE {
             try
             {
                 valor = this.senhaNova++;
-                System.out.println("Cliente com id " + id + " recebeu a senha " + valor );
+                System.out.println("||| Cliente com id " + id + " recebeu a senha " + valor + " |||\n");
             }
             finally { lock.unlock(); }
 
@@ -30,18 +30,17 @@ public class RESTAURANTE {
             lock.lock();
             try
             {
-                if(this.juntos || this.senhaAtual != senhaCliente)
-                {
-                    lock.unlock();
-                    return false;
-                }
+                if(this.juntos || this.senhaAtual != senhaCliente)  return false;
 
                 this.lugaresOcupados++;
                 this.senhaAtual++;
 
-                System.out.println("Cliente " + id + " acaba de entrar no restaurante.\n" + this.lugaresOcupados + " cliente(s) sentado(s)");
+                System.out.println(">>> Cliente " + id + " entrou. <<<\n" + this.lugaresOcupados + " cliente(s) sentado(s)\n");
 
-                if(this.lugaresOcupados == 5) this.juntos = true;
+                if(this.lugaresOcupados == 5){
+                    this.juntos = true;
+                    System.out.println("\nMesa cheia!!!\n");
+                }
             }
             finally { lock.unlock(); }
 
@@ -52,9 +51,13 @@ public class RESTAURANTE {
             lock.lock();
 
             this.lugaresOcupados--;
-            if(this.lugaresOcupados == 0) juntos = false;
 
-            System.out.println("Cliente " + id + " saiu.\n" + this.lugaresOcupados + " cliente(s) sentado(s).");
+            System.out.println("<<< Cliente " + id + " saiu. >>>\n" + this.lugaresOcupados + " cliente(s) sentado(s).\n");
+
+            if(this.lugaresOcupados == 0){
+                juntos = false;
+                System.out.println("\nMesa vazia!!!\n");
+            }
 
             lock.unlock();
         }
@@ -72,7 +75,7 @@ public class RESTAURANTE {
 
         public void run()
         {
-            int senha = restaurante.GetNewSenha();
+            int senha = restaurante.GetNewSenha(id);
             boolean sentado = false;
 
             while(!sentado) sentado = restaurante.GetAssento(senha, id);
@@ -84,6 +87,7 @@ public class RESTAURANTE {
             catch (InterruptedException e)
             {
                 restaurante.LeaveAssento(id);
+                return;
             }
 
             restaurante.LeaveAssento(id);
@@ -93,10 +97,21 @@ public class RESTAURANTE {
     public static void main(String[] args) throws InterruptedException {
         Restaurante restaurante = new Restaurante();
 
-        int TOTALCLIENTES = 100;
+        int TOTAL_CLIENTES = 105;
+        ArrayList<Thread> Tclientes = new ArrayList<>(0);
 
-        for(int id=1; id<=TOTALCLIENTES; id++);
-            
+        Random random = new Random();
 
+        for(int i=0; i<TOTAL_CLIENTES; i++)
+        {
+            int tempo = random.nextInt(10, 200);
+            Cliente c = new Cliente(i, tempo, restaurante);
+            Thread t = new Thread(c);
+            Tclientes.add(t);
+            t.start();
+        }
+
+        for(int i=0; i<TOTAL_CLIENTES; i++)
+            Tclientes.get(i).join();
     }
 }
